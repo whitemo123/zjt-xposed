@@ -4,10 +4,16 @@ import android.content.Context;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
+import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import android.hardware.Camera;
+import android.util.Log;
 
 public class XposedHookMain implements IXposedHookLoadPackage {
+
+  private String TAG_NAME = "ZJT";
 
   @Override
   public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
@@ -46,6 +52,21 @@ public class XposedHookMain implements IXposedHookLoadPackage {
       @Override
       protected void afterHookedMethod(MethodHookParam param) throws Throwable {
         param.setResult(false);
+      }
+    });
+    // 禁止setParameters
+    XposedHelpers.findAndHookMethod("android.hardware.Camera", classLoader, "setParameters", Camera.Parameters.class, new XC_MethodReplacement() {
+      @Override
+      protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+        return null;
+      }
+    });
+    // 禁止强制前置摄像头
+    XposedHelpers.findAndHookMethod("android.hardware.Camera", classLoader, "open", int.class, new XC_MethodReplacement() {
+      @Override
+      protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+        XposedBridge.log(String.valueOf(param.args[0]));
+        return Camera.open();
       }
     });
   }
