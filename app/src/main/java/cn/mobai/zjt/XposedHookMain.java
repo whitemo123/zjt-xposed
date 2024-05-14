@@ -22,8 +22,8 @@ public class XposedHookMain implements IXposedHookLoadPackage {
     if ("com.huiruan.zjt".equals(loadPackageParam.packageName)) {
       String ip = HttpUtil.performGetRequest("https://api.ipify.org/");
 
-      XSharedPreferences prefs = new XSharedPreferences("cn.mobai.zjt", "ZJT-XPOSED");
-      prefs.makeWorldReadable();
+      XSharedPreferences prefs = new XSharedPreferences("cn.mobai.zjt", "package");
+      prefs.reload();
 
       String uuid = prefs.getString("uuid", "");
       String key = prefs.getString("key", "");

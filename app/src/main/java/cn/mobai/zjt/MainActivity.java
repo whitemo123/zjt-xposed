@@ -1,10 +1,13 @@
 package cn.mobai.zjt;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.UUID;
 
@@ -14,7 +17,7 @@ public class MainActivity extends Activity {
 
   private Button button;
 
-  private DataUtil dataUtil;
+  private SharedPreferences sp;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -25,16 +28,17 @@ public class MainActivity extends Activity {
 
     button = (Button) findViewById(R.id.bt_1);
 
-    dataUtil = new DataUtil(this);
+    sp = getSharedPreferences("package", Context.MODE_WORLD_READABLE);
 
-    if ("".equals(dataUtil.getString("uuid", ""))) {
-      dataUtil.putString("uuid", getUUID());
+    if ("".equals(sp.getString("uuid", ""))) {
+      sp.edit().putString("uuid", getUUID()).commit();
     }
 
     button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        dataUtil.putString("key", editText.getText().toString());
+        sp.edit().putString("key", editText.getText().toString()).commit();
+        Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_LONG).show();
       }
     });
   }
