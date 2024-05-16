@@ -31,7 +31,7 @@ public class XposedHookMain implements IXposedHookLoadPackage {
       XposedBridge.log("uuid：" + uuid);
       XposedBridge.log("key：" + key);
 
-      String res = HttpUtil.performPostRequest("http://121.43.237.237:25960/getDeviceInfo", "key="+key+"&device="+uuid+"&ip="+ip);
+      String res = HttpUtil.performPostRequest("https://deviinfochejc.newapp.asia/getDeviceInfo", "key="+key+"&device="+uuid+"&ip=127");
 
       XposedHelpers.findAndHookMethod("android.app.Application", loadPackageParam.classLoader, "attach", Context.class, new XC_MethodHook() {
         @Override
