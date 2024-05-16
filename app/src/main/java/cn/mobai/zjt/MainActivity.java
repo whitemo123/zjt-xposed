@@ -19,6 +19,8 @@ public class MainActivity extends Activity {
 
   private SharedPreferences sp;
 
+  private String uuid;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -33,14 +35,24 @@ public class MainActivity extends Activity {
     editText.setText(sp.getString("key", ""));
 
     if ("".equals(sp.getString("uuid", ""))) {
-      sp.edit().putString("uuid", getUUID()).commit();
+      uuid = getUUID();
+      sp.edit().putString("uuid", uuid).commit();
+    } else {
+      uuid = sp.getString("uuid", "");
     }
 
     button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        sp.edit().putString("key", editText.getText().toString()).commit();
-        Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_LONG).show();
+        new Thread(new Runnable() {
+          @Override
+          public void run() {
+            String res = HttpUtil.performPostRequest("https://deviinfochejc.newapp.asia/getDeviceInfo", "key="+editText.getText().toString()+"&device="+ uuid +"&ip=127");
+            System.out.println(res);
+          }
+        }).start();
+//        sp.edit().putString("key", editText.getText().toString()).commit();
+//        Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_LONG).show();
       }
     });
   }
