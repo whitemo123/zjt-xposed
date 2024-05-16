@@ -21,11 +21,15 @@
         </activity>
         <!-- 应用为模块 -->
         <meta-data
+            android:name="xposedsharedprefs"
+            android:value="true" />
+
+        <meta-data
             android:name="xposedmodule"
             android:value="true" /> <!-- 版本信息 -->
         <meta-data
             android:name="xposedminversion"
-            android:value="82" /> <!-- 模块描述 -->
+            android:value="93" /> <!-- 模块描述 -->
         <meta-data
             android:name="xposeddescription"
             android:value="藏建通模拟器全放开插件" />

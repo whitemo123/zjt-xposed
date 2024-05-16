@@ -30,6 +30,8 @@ public class MainActivity extends Activity {
 
     sp = getSharedPreferences("package", Context.MODE_WORLD_READABLE);
 
+    editText.setText(sp.getString("key", ""));
+
     if ("".equals(sp.getString("uuid", ""))) {
       sp.edit().putString("uuid", getUUID()).commit();
     }
