@@ -20,18 +20,18 @@ public class XposedHookMain implements IXposedHookLoadPackage {
   @Override
   public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
     if ("com.huiruan.zjt".equals(loadPackageParam.packageName)) {
-      String ip = HttpUtil.performGetRequest("https://api.ipify.org/");
-
-      XSharedPreferences prefs = new XSharedPreferences("cn.mobai.zjt", "package");
-      prefs.reload();
-
-      String uuid = prefs.getString("uuid", "");
-      String key = prefs.getString("key", "");
-
-      XposedBridge.log("uuid：" + uuid);
-      XposedBridge.log("key：" + key);
-
-      String res = HttpUtil.performPostRequest("http://121.43.237.237:25960/getDeviceInfo", "key="+key+"&device="+uuid+"&ip="+ip);
+//      String ip = HttpUtil.performGetRequest("https://api.ipify.org/");
+//
+//      XSharedPreferences prefs = new XSharedPreferences("cn.mobai.zjt", "package");
+//      prefs.reload();
+//
+//      String uuid = prefs.getString("uuid", "");
+//      String key = prefs.getString("key", "");
+//
+//      XposedBridge.log("uuid：" + uuid);
+//      XposedBridge.log("key：" + key);
+//
+//      String res = HttpUtil.performPostRequest("http://121.43.237.237:25960/getDeviceInfo", "key="+key+"&device="+uuid+"&ip="+ip);
 
       XposedHelpers.findAndHookMethod("android.app.Application", loadPackageParam.classLoader, "attach", Context.class, new XC_MethodHook() {
         @Override
@@ -40,11 +40,11 @@ public class XposedHookMain implements IXposedHookLoadPackage {
           Context context = (Context) param.args[0];
           ClassLoader classLoader = context.getClassLoader();
 
-          if (res == null || "".equals(res)) {
-            Toast.makeText(context, "未注册", Toast.LENGTH_LONG).show();
-            return;
-          }
-          Toast.makeText(context, "注册成功", Toast.LENGTH_LONG).show();
+//          if (res == null || "".equals(res)) {
+//            Toast.makeText(context, "未注册", Toast.LENGTH_LONG).show();
+//            return;
+//          }
+//          Toast.makeText(context, "注册成功", Toast.LENGTH_LONG).show();
           hookCheck225(classLoader);
         }
       });
@@ -72,6 +72,15 @@ public class XposedHookMain implements IXposedHookLoadPackage {
       @Override
       protected void afterHookedMethod(MethodHookParam param) throws Throwable {
         param.setResult(false);
+      }
+    });
+    // 修改工具类获取版本号
+    XposedHelpers.findAndHookMethod("com.blankj.utilcode.util.d", classLoader, "c", new XC_MethodHook() {
+      @Override
+      protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+        super.afterHookedMethod(param);
+        XposedBridge.log(String.valueOf(param.getResult()));
+        param.setResult(306);
       }
     });
     // 禁止setParameters

@@ -29,7 +29,7 @@
             android:value="true" /> <!-- 版本信息 -->
         <meta-data
             android:name="xposedminversion"
-            android:value="93" /> <!-- 模块描述 -->
+            android:value="82" /> <!-- 模块描述93 -->
         <meta-data
             android:name="xposeddescription"
             android:value="藏建通模拟器全放开插件" />
